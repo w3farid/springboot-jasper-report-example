@@ -73,7 +73,7 @@ public class Config implements WebMvcConfigurer {
 		dataSource.setDriverClassName(DB_DRIVER);
 		dataSource.setUrl(DB_URL);
 		dataSource.setUsername("root");
-		dataSource.setPassword("123456");
+		dataSource.setPassword(DB_PASSWORD);
 		return dataSource;
 	}
 

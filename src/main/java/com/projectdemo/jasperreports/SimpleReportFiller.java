@@ -1,16 +1,23 @@
 package com.projectdemo.jasperreports;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.util.JRSaver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.servlet.ServletContext;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRSaver;
 
 @Component
 public class SimpleReportFiller {
@@ -23,6 +30,9 @@ public class SimpleReportFiller {
 
     @Autowired
     private DataSource dataSource;
+    
+    @Autowired
+    private ServletContext servletContext;
 
     private Map<String, Object> parameters;
 
@@ -37,12 +47,13 @@ public class SimpleReportFiller {
 
     public void compileReport() {
         try {
+        	//System.err.println(servletContext.getRealPath("/reports/"));
             InputStream reportStream = getClass().getResourceAsStream("/reports/".concat(reportFileName));
             jasperReport = JasperCompileManager.compileReport(reportStream);
-            JRSaver.saveObject(jasperReport, reportFileName.replace(".jrxml", ".jasper"));
+            JRSaver.saveObject(jasperReport, "src/main/resources/reports/"+reportFileName.replace(".jrxml", ".jasper"));
         } catch (JRException ex) {
             Logger.getLogger(SimpleReportFiller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     public void fillReport() {

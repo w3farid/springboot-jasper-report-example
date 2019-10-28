@@ -44,7 +44,7 @@ public class SimpleReportExporter {
         JRPdfExporter exporter = new JRPdfExporter();
        
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fileName));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("src/main/resources/reports/"+fileName));
 
         SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
         reportConfig.setSizePageToContent(true);
