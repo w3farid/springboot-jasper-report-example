@@ -68,7 +68,7 @@ public class SimpleReportExporter {
         JRXlsxExporter exporter = new JRXlsxExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fileName));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("src/main/resources/reports/"+fileName));
 
         SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
         reportConfig.setSheetNames(new String[] { sheetName });
@@ -86,7 +86,7 @@ public class SimpleReportExporter {
         JRCsvExporter exporter = new JRCsvExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleWriterExporterOutput(fileName));
+        exporter.setExporterOutput(new SimpleWriterExporterOutput("src/main/resources/reports/"+fileName));
 
         try {
             exporter.exportReport();
@@ -99,7 +99,7 @@ public class SimpleReportExporter {
         HtmlExporter exporter = new HtmlExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleHtmlExporterOutput(fileName));
+        exporter.setExporterOutput(new SimpleHtmlExporterOutput("src/main/resources/reports/"+fileName));
 
         try {
             exporter.exportReport();

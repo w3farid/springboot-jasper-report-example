@@ -194,6 +194,73 @@ public class UserController implements CommonController<User> {
 		return null;
 	}
 	
+	@GetMapping("/report2")
+	public String pdfReporttest(HttpServletResponse response) {
+		response.setContentType("application/pdf");
+		try {
+			SimpleReportExporter simpleExporter = new SimpleReportExporter();
+
+			simpleReportFiller.setReportFileName("report2.jrxml");
+			simpleReportFiller.compileReport();
+
+			Map<String, Object> parameters = new HashMap<>();
+			prepareReport("report3.jrxml",parameters,response);
+			simpleReportFiller.setParameters(parameters);
+			simpleReportFiller.fillReport();
+			simpleExporter.setJasperPrint(simpleReportFiller.getJasperPrint());
+
+			simpleExporter.exportToPdf("report2.pdf", "olonsoft");
+
+			File file = new File("src/main/resources/reports/report2.pdf");
+			response.setHeader("Content-Type", servletContext.getMimeType(file.getName()));
+			response.setHeader("Content-Length", String.valueOf(file.length()));
+			response.setHeader("Content-Disposition", "inline; filename=\"report2.pdf\"");
+			Files.copy(file.toPath(), response.getOutputStream());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@GetMapping("/report3/{id}")
+	public String report3(@PathVariable int id, HttpServletResponse response) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("id", id);
+		prepareReport("report3.jrxml",parameters,response);
+		return null;
+	}
+	
+	private void prepareReport(String fileName, Map<String, Object> parameters, HttpServletResponse response) {
+		response.setContentType("application/pdf");
+		SimpleReportExporter simpleExporter = new SimpleReportExporter();
+
+		simpleReportFiller.setReportFileName(fileName);
+		simpleReportFiller.compileReport();
+		
+
+		simpleReportFiller.setParameters(parameters);
+		simpleReportFiller.fillReport();
+		simpleExporter.setJasperPrint(simpleReportFiller.getJasperPrint());
+
+		simpleExporter.exportToPdf(fileName, "olonsoft");
+
+		File file = new File("src/main/resources/reports/"+fileName);
+		response.setHeader("Content-Type", servletContext.getMimeType(file.getName()));
+		response.setHeader("Content-Length", String.valueOf(file.length()));
+		response.setHeader("Content-Disposition", "inline; filename=\""+fileName+"\"");
+		try {
+			Files.copy(file.toPath(), response.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
 	
 
 }
